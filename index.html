@@ -142,7 +142,7 @@ function showProducts(category, price, files) {
       .replace(/[-_]/g, " ");
 
     const id = category + index;
-
+const fitId = "fit-" + id;
     return `
       <div class="product">
         <img src="${imageURL}" alt="${name}" loading="lazy">
@@ -152,6 +152,10 @@ function showProducts(category, price, files) {
           <option value="Black">Black</option>
           <option value="White">White</option>
         </select>
+<select id="${fitId}">
+    <option value="Regular Fit">Regular Fit</option>
+    <option value="Oversized Fit">Oversized Fit</option>
+</select>
         <select id="size-${id}">
           <option value="">Select Size</option>
           <option>S</option><option>M</option>
@@ -159,15 +163,16 @@ function showProducts(category, price, files) {
         </select>
         <button class="add" onclick="addCart(
           '${category}', '${name.replace(/'/g, "\\'")}',
-          ${price}, 'color-${id}', 'size-${id}'
+          ${price}, 'color-${id}', '${fitId}', 'size-${id}'
         )">ADD TO CART</button>
       </div>
     `;
   }).join("");
 }
 
-function addCart(category, name, price, colorId, sizeId) {
+function addCart(category, name, price, colorId, fitId, sizeId) {
   const color = document.getElementById(colorId).value;
+const fit = document.getElementById(fitId).value;
   const size = document.getElementById(sizeId).value;
 
   if (!size) {
@@ -180,6 +185,7 @@ function addCart(category, name, price, colorId, sizeId) {
     name: "DEWEN T-Shirt",
     price: price,
     color: color,
+fit: fit,
     size: size
 });
   
@@ -196,7 +202,7 @@ function showCart() {
     total += item.price;
     box.innerHTML += `
       <div class="cart-item">
-        ${item.category} | ${item.name} | ${item.color} |
+        ${item.category.toUpperCase()} ARTWORK | | ${item.name} | ${item.color} | ${item.fit}
         Size ${item.size} | Rs. ${item.price}
         <button onclick="removeItem(${i})">Remove</button>
       </div>`;
