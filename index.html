@@ -316,7 +316,7 @@ document.addEventListener("click", function(e) {
   }
 });
 
-function zoomPhoto(amount) {
+function zoomPhoto(amount) 
   photoZoom *= amount;
   photoZoom = Math.max(0.5, Math.min(photoZoom, 4));
   document.getElementById("full-photo").style.transform =
@@ -324,11 +324,16 @@ function zoomPhoto(amount) {
 }
 
 function closePhoto(e) {
-  if (e.target.id === "photo-viewer" ||
-      e.target.tagName === "BUTTON") {
+
+  if (
+    e.target.id === "photo-viewer" ||
+    (e.target.tagName === "BUTTON" &&
+     e.target.innerText.trim() === "X")
+  ) {
     document.getElementById("photo-viewer").style.display = "none";
   }
 }
-</script>
+
+ </script>
  </body>
 </html>
