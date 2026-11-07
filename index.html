@@ -7,37 +7,43 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#fff;color:#111}
-header{background:#050505;color:white;padding:22px 7%;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:27px;letter-spacing:5px;font-weight:bold}
-nav a{color:white;text-decoration:none;margin-left:20px;font-size:13px}
-.hero{background:#111;color:white;text-align:center;padding:110px 20px}
-.hero h1{font-size:55px;letter-spacing:8px}
-.hero p{margin:20px;font-size:14px;letter-spacing:3px}
-.btn{display:inline-block;background:white;color:black;padding:14px 30px;text-decoration:none;margin-top:20px;font-weight:bold}
+header{background:#080808;color:white;padding:22px 7%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:28px;letter-spacing:6px;font-weight:bold}
+nav a{color:white;text-decoration:none;margin-left:20px;font-size:12px}
+.hero{background:#080808;color:white;text-align:center;padding:110px 20px}
+.hero h1{font-size:58px;letter-spacing:10px}
+.hero p{margin:20px;letter-spacing:3px}
+.btn{display:inline-block;background:white;color:black;padding:15px 30px;text-decoration:none;margin-top:20px;font-weight:bold}
 section{padding:65px 7%;text-align:center}
-h2{letter-spacing:4px;margin-bottom:35px}
-.products{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:850px;margin:auto}
-.product{border:1px solid #eee;padding:15px}
-.product img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#eee}
-.product h3{margin:15px}
-.product p{color:#555}
+h2{letter-spacing:4px;margin-bottom:20px}
+.intro{color:#777;margin-bottom:35px}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;max-width:900px;margin:auto}
+.product{border:1px solid #eee;padding:15px;text-align:center}
+.product img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.product h3{margin:18px 0 10px;letter-spacing:1px}
+.price{font-size:21px;font-weight:bold;margin:15px}
+select{padding:12px;margin:7px;width:90%;max-width:250px;border:1px solid #ccc;background:white}
+.add{background:#080808;color:white;border:0;padding:14px 25px;margin:12px;cursor:pointer;width:90%;max-width:250px}
+#cart{background:#f5f5f5}
+.cart-item{padding:12px;border-bottom:1px solid #ddd}
 .order{background:#080808;color:white}
-.order a{color:black;background:white;padding:15px 25px;display:inline-block;margin-top:20px;text-decoration:none}
-footer{background:#050505;color:white;text-align:center;padding:30px;font-size:12px}
+.order a{color:black;background:white;padding:15px 25px;display:inline-block;margin-top:20px;text-decoration:none;font-weight:bold}
+footer{background:#080808;color:white;text-align:center;padding:30px;font-size:12px;line-height:2}
 @media(max-width:600px){
-.hero h1{font-size:36px}
-nav a{margin-left:8px;font-size:11px}
+.hero h1{font-size:38px}
 .products{grid-template-columns:1fr}
+nav a{margin-left:8px;font-size:10px}
 }
 </style>
 </head>
 <body>
+
 <header>
 <div class="logo">DEWEN.</div>
 <nav>
 <a href="#home">HOME</a>
 <a href="#shop">SHOP</a>
-<a href="#contact">CONTACT</a>
+<a href="#cart">CART</a>
 </nav>
 </header>
 
@@ -50,29 +56,98 @@ nav a{margin-left:8px;font-size:11px}
 
 <section id="shop">
 <h2>OUR COLLECTION</h2>
+<p class="intro">Premium Unisex T-Shirts | Black & White</p>
+
 <div class="products">
+
 <div class="product">
-<img src="https://placehold.co/600x750/111111/ffffff?text=DEWEN+BLACK" alt="Black T-shirt">
-<h3>DEWEN BLACK TEE</h3>
-<p>Premium Minimal Collection</p>
+<img src="https://placehold.co/600x750/111111/ffffff?text=STANDARD+DESIGN" alt="Standard design">
+<h3>STANDARD ARTWORK</h3>
+<p>Minimal & Simple Designs</p>
+<div class="price">Rs. 2,000/=</div>
+<select id="color1">
+<option value="Black">Black</option>
+<option value="White">White</option>
+</select>
+<select id="size1">
+<option value="">Select Size</option>
+<option>S</option><option>M</option>
+<option>L</option><option>XL</option>
+</select>
+<button class="add" onclick="addCart('Standard Artwork',2000,'color1','size1')">ADD TO CART</button>
 </div>
+
 <div class="product">
-<img src="https://placehold.co/600x750/f0f0f0/111111?text=DEWEN+WHITE" alt="White T-shirt">
-<h3>DEWEN WHITE TEE</h3>
-<p>Premium Minimal Collection</p>
+<img src="https://placehold.co/600x750/eeeeee/111111?text=PREMIUM+ARTWORK" alt="Premium design">
+<h3>PREMIUM ARTWORK</h3>
+<p>Large Prints & Multi-Colour Designs</p>
+<div class="price">Rs. 2,350/=</div>
+<select id="color2">
+<option value="Black">Black</option>
+<option value="White">White</option>
+</select>
+<select id="size2">
+<option value="">Select Size</option>
+<option>S</option><option>M</option>
+<option>L</option><option>XL</option>
+</select>
+<button class="add" onclick="addCart('Premium Artwork',2350,'color2','size2')">ADD TO CART</button>
 </div>
+
 </div>
 </section>
 
-<section class="order" id="contact">
-<h2>WEAR YOUR EVERYDAY</h2>
-<p>Interested in our collection?</p>
-<a href="https://wa.me/94758512856">ORDER VIA WHATSAPP</a>
+<section id="cart">
+<h2>YOUR CART</h2>
+<div id="items">Your cart is empty.</div>
+<h3 id="total" style="margin:20px">Total: Rs. 0/=</h3>
+<button class="add" onclick="checkout()">ORDER VIA WHATSAPP</button>
+</section>
+
+<section class="order">
+<h2>EVERYDAY ELEVATED</h2>
+<p>Wear Your Style. Choose DEWEN.</p>
+<a href="https://wa.me/94758512856">CONTACT US ON WHATSAPP</a>
 </section>
 
 <footer>
 <p>DEWEN © 2026</p>
 <p>EVERYDAY ELEVATED</p>
+<p>BLACK & WHITE | UNISEX</p>
 </footer>
+
+<script>
+let cart=[];
+function addCart(name,price,colorId,sizeId){
+let color=document.getElementById(colorId).value;
+let size=document.getElementById(sizeId).value;
+if(!size){alert("Please select a size");return;}
+cart.push({name,price,color,size});
+showCart();
+}
+function showCart(){
+let box=document.getElementById("items");
+let total=0;
+box.innerHTML="";
+cart.forEach((item,i)=>{
+total+=item.price;
+box.innerHTML+=`<div class="cart-item">${item.name} | ${item.color} | Size ${item.size} | Rs. ${item.price} <button onclick="removeItem(${i})">Remove</button></div>`;
+});
+if(cart.length===0)box.innerHTML="Your cart is empty.";
+document.getElementById("total").innerText="Total: Rs. "+total+"/=";
+}
+function removeItem(i){cart.splice(i,1);showCart();}
+function checkout(){
+if(cart.length===0){alert("Your cart is empty");return;}
+let message="Hello DEWEN! I want to order:\n";
+let total=0;
+cart.forEach(item=>{
+message+=item.name+" - "+item.color+" - Size "+item.size+" - Rs."+item.price+"\n";
+total+=item.price;
+});
+message+="Total: Rs."+total;
+window.open("https://wa.me/94758512856?text="+encodeURIComponent(message),"_blank");
+}
+</script>
 </body>
 </html>
