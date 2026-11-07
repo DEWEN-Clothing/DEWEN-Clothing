@@ -244,11 +244,91 @@ function checkout() {
 
 loadProducts();
 </script>
-<section id="size-guide">
+
+ <section id="size-guide">
   <h2>SIZE GUIDE</h2>
+
   <h3>Oversized T-Shirt</h3>
-<img src="images/oversized.jpg/DEWEN oversized chart.jpeg" alt="DEWEN Oversized Size Chart">
-<h3>Regular Fit T-Shirt</h3>
-<img src="images/regular.jpg/DEWEN regular fit chart.jpeg" alt="DEWEN Regular Fit Size Chart">
+  <img
+    src="images/oversized.jpg/DEWEN%20oversized%20chart.jpeg"
+    alt="DEWEN Oversized Size Chart"
+    class="zoom-photo">
+
+  <h3>Regular Fit T-Shirt</h3>
+  <img
+    src="images/regular.jpg/DEWEN%20regular%20fit%20chart.jpeg"
+    alt="DEWEN Regular Fit Size Chart"
+    class="zoom-photo">
+</section>
+
+<div id="photo-viewer" onclick="closePhoto(event)">
+  <button onclick="closePhoto(event)">✕</button>
+  <button onclick="zoomPhoto(1.25)">＋</button>
+  <button onclick="zoomPhoto(0.8)">－</button>
+  <img id="full-photo" src="" alt="Full Image">
+</div>
+
+<style>
+#photo-viewer {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.95);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+}
+#photo-viewer button {
+  position:relative;
+  z-index:2;
+  margin:8px;
+  padding:12px;
+  font-size:20px;
+  cursor:pointer;
+}
+#full-photo {
+  max-width:95%;
+  max-height:85vh;
+  object-fit:contain;
+  transform:scale(1);
+  transition:transform 0.2s;
+}
+.zoom-photo {
+  max-width:100%;
+  cursor:zoom-in;
+}
+</style>
+
+<script>
+let photoZoom = 1;
+
+document.addEventListener("click", function(e) {
+  if (e.target.tagName === "IMG" &&
+      e.target.id !== "full-photo" &&
+      !e.target.closest("#photo-viewer")) {
+    const viewer = document.getElementById("photo-viewer");
+    const full = document.getElementById("full-photo");
+    full.src = e.target.src;
+    photoZoom = 1;
+    full.style.transform = "scale(1)";
+    viewer.style.display = "flex";
+  }
+});
+
+function zoomPhoto(amount) {
+  photoZoom *= amount;
+  photoZoom = Math.max(0.5, Math.min(photoZoom, 4));
+  document.getElementById("full-photo").style.transform =
+    "scale(" + photoZoom + ")";
+}
+
+function closePhoto(e) {
+  if (e.target.id === "photo-viewer" ||
+      e.target.tagName === "BUTTON") {
+    document.getElementById("photo-viewer").style.display = "none";
+  }
+}
+</script>
  </body>
 </html>
