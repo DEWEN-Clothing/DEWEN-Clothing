@@ -146,7 +146,7 @@ function showProducts(category, price, files) {
     return `
       <div class="product">
         <img src="${imageURL}" alt="${name}" loading="lazy">
-        <h3>DEWEN T-Shirt</h3>
+        <h3>${category === "standard" ? "STANDARD ARTWORK" : "PREMIUM ARTWORK"}</h3>
         <div class="price">Rs. ${price.toLocaleString("en-US")}/=</div>
         <select id="color-${id}">
           <option value="Black">Black</option>
