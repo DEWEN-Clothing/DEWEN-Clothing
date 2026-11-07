@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEWEN | Everyday Elevated</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#fff;color:#111}
+header{background:#050505;color:white;padding:22px 7%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:27px;letter-spacing:5px;font-weight:bold}
+nav a{color:white;text-decoration:none;margin-left:20px;font-size:13px}
+.hero{background:#111;color:white;text-align:center;padding:110px 20px}
+.hero h1{font-size:55px;letter-spacing:8px}
+.hero p{margin:20px;font-size:14px;letter-spacing:3px}
+.btn{display:inline-block;background:white;color:black;padding:14px 30px;text-decoration:none;margin-top:20px;font-weight:bold}
+section{padding:65px 7%;text-align:center}
+h2{letter-spacing:4px;margin-bottom:35px}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:850px;margin:auto}
+.product{border:1px solid #eee;padding:15px}
+.product img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#eee}
+.product h3{margin:15px}
+.product p{color:#555}
+.order{background:#080808;color:white}
+.order a{color:black;background:white;padding:15px 25px;display:inline-block;margin-top:20px;text-decoration:none}
+footer{background:#050505;color:white;text-align:center;padding:30px;font-size:12px}
+@media(max-width:600px){
+.hero h1{font-size:36px}
+nav a{margin-left:8px;font-size:11px}
+.products{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">DEWEN.</div>
+<nav>
+<a href="#home">HOME</a>
+<a href="#shop">SHOP</a>
+<a href="#contact">CONTACT</a>
+</nav>
+</header>
+
+<div class="hero" id="home">
+<h1>DEWEN</h1>
+<p>EVERYDAY ELEVATED</p>
+<p>MINIMAL STYLE. PREMIUM FEEL.</p>
+<a href="#shop" class="btn">EXPLORE COLLECTION</a>
+</div>
+
+<section id="shop">
+<h2>OUR COLLECTION</h2>
+<div class="products">
+<div class="product">
+<img src="https://placehold.co/600x750/111111/ffffff?text=DEWEN+BLACK" alt="Black T-shirt">
+<h3>DEWEN BLACK TEE</h3>
+<p>Premium Minimal Collection</p>
+</div>
+<div class="product">
+<img src="https://placehold.co/600x750/f0f0f0/111111?text=DEWEN+WHITE" alt="White T-shirt">
+<h3>DEWEN WHITE TEE</h3>
+<p>Premium Minimal Collection</p>
+</div>
+</div>
+</section>
+
+<section class="order" id="contact">
+<h2>WEAR YOUR EVERYDAY</h2>
+<p>Interested in our collection?</p>
+<a href="https://wa.me/94758512856">ORDER VIA WHATSAPP</a>
+</section>
+
+<footer>
+<p>DEWEN © 2026</p>
+<p>EVERYDAY ELEVATED</p>
+</footer>
+</body>
+</html>
