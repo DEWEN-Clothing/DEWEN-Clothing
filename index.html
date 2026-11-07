@@ -152,9 +152,9 @@ const fitId = "fit-" + id;
           <option value="Black">Black</option>
           <option value="White">White</option>
         </select>
-<select id="${fitId}">
-    <option value="Regular Fit">Regular Fit</option>
-    <option value="Oversized Fit">Oversized Fit</option>
+<select id="${fitId}" onchange="const s=document.getElementById('size-${id}'); s.innerHTML = '<option>Select Size</option>' + (this.value === 'Oversized Fit' ? '<option>M</option><option>L</option><option>XL</option>' : '<option>S</option><option>M</option><option>L</option><option>XL</option>');">
+<option value="Regular Fit">Regular Fit</option>
+<option value="Oversized Fit">Oversized Fit</option>
 </select>
         <select id="size-${id}">
           <option value="">Select Size</option>
@@ -240,6 +240,13 @@ function checkout() {
     encodeURIComponent(message), "_blank"
   );
 }
+<section id="size-guide">
+  <h2>SIZE GUIDE</h2>
+  <h3>Oversized T-Shirt</h3>
+  <img src="images/oversized.jpg" alt="DEWEN Oversized Size Chart">
+  <h3>Regular Fit T-Shirt</h3>
+  <img src="images/regular.jpg" alt="DEWEN Regular Fit Size Chart">
+</section>
 
 loadProducts();
 </script>
