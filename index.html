@@ -10,26 +10,28 @@ body{font-family:Arial,sans-serif;background:#fff;color:#111}
 header{background:#080808;color:white;padding:22px 7%;display:flex;justify-content:space-between;align-items:center}
 .logo{font-size:28px;letter-spacing:6px;font-weight:bold}
 nav a{color:white;text-decoration:none;margin-left:20px;font-size:12px}
-.hero{background:#080808;color:white;text-align:center;padding:110px 20px}
+.hero{background:#080808;color:white;text-align:center;padding:100px 20px}
 .hero h1{font-size:58px;letter-spacing:10px}
 .hero p{margin:20px;letter-spacing:3px}
 .btn{display:inline-block;background:white;color:black;padding:15px 30px;text-decoration:none;margin-top:20px;font-weight:bold}
 section{padding:65px 7%;text-align:center}
 h2{letter-spacing:4px;margin-bottom:20px}
 .intro{color:#777;margin-bottom:35px}
-.products{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;max-width:900px;margin:auto}
-.product{border:1px solid #eee;padding:15px;text-align:center}
-.product img{width:100%;aspect-ratio:4/5;object-fit:cover}
-.product h3{margin:18px 0 10px;letter-spacing:1px}
-.price{font-size:21px;font-weight:bold;margin:15px}
-select{padding:12px;margin:7px;width:90%;max-width:250px;border:1px solid #ccc;background:white}
-.add{background:#080808;color:white;border:0;padding:14px 25px;margin:12px;cursor:pointer;width:90%;max-width:250px}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1200px;margin:auto}
+.product{border:1px solid #eee;padding:12px;text-align:center}
+.product img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#eee}
+.product h3{margin:15px 0 8px;font-size:14px}
+.price{font-size:19px;font-weight:bold;margin:12px}
+select{padding:11px;margin:6px;width:90%;max-width:250px;border:1px solid #ccc;background:white}
+.add{background:#080808;color:white;border:0;padding:13px 20px;margin:10px;cursor:pointer;width:90%;max-width:250px}
 #cart{background:#f5f5f5}
 .cart-item{padding:12px;border-bottom:1px solid #ddd}
 .order{background:#080808;color:white}
 .order a{color:black;background:white;padding:15px 25px;display:inline-block;margin-top:20px;text-decoration:none;font-weight:bold}
 footer{background:#080808;color:white;text-align:center;padding:30px;font-size:12px;line-height:2}
-@media(max-width:600px){
+.loading{padding:30px;color:#777}
+@media(max-width:800px){.products{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){
 .hero h1{font-size:38px}
 .products{grid-template-columns:1fr}
 nav a{margin-left:8px;font-size:10px}
@@ -58,42 +60,18 @@ nav a{margin-left:8px;font-size:10px}
 <h2>OUR COLLECTION</h2>
 <p class="intro">Premium Unisex T-Shirts | Black & White</p>
 
-<div class="products">
-
-<div class="product">
-<img src="https://placehold.co/600x750/111111/ffffff?text=STANDARD+DESIGN" alt="Standard design">
-<h3>STANDARD ARTWORK</h3>
-<p>Minimal & Simple Designs</p>
-<div class="price">Rs. 2,000/=</div>
-<select id="color1">
-<option value="Black">Black</option>
-<option value="White">White</option>
-</select>
-<select id="size1">
-<option value="">Select Size</option>
-<option>S</option><option>M</option>
-<option>L</option><option>XL</option>
-</select>
-<button class="add" onclick="addCart('Standard Artwork',2000,'color1','size1')">ADD TO CART</button>
+<h2>STANDARD ARTWORK</h2>
+<p class="intro">Rs. 2,000/=</p>
+<div class="products" id="standard">
+<p class="loading">Loading Standard Collection...</p>
 </div>
 
-<div class="product">
-<img src="https://placehold.co/600x750/eeeeee/111111?text=PREMIUM+ARTWORK" alt="Premium design">
-<h3>PREMIUM ARTWORK</h3>
-<p>Large Prints & Multi-Colour Designs</p>
-<div class="price">Rs. 2,350/=</div>
-<select id="color2">
-<option value="Black">Black</option>
-<option value="White">White</option>
-</select>
-<select id="size2">
-<option value="">Select Size</option>
-<option>S</option><option>M</option>
-<option>L</option><option>XL</option>
-</select>
-<button class="add" onclick="addCart('Premium Artwork',2350,'color2','size2')">ADD TO CART</button>
-</div>
+<br><br>
 
+<h2>PREMIUM ARTWORK</h2>
+<p class="intro">Rs. 2,350/=</p>
+<div class="products" id="premium">
+<p class="loading">Loading Premium Collection...</p>
 </div>
 </section>
 
@@ -117,37 +95,146 @@ nav a{margin-left:8px;font-size:10px}
 </footer>
 
 <script>
-let cart=[];
-function addCart(name,price,colorId,sizeId){
-let color=document.getElementById(colorId).value;
-let size=document.getElementById(sizeId).value;
-if(!size){alert("Please select a size");return;}
-cart.push({name,price,color,size});
-showCart();
+const owner = "kasunnimesh1000-kasun";
+const repo = "DEWEN-Clothing";
+let cart = [];
+
+async function loadProducts() {
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/trees/main?recursive=1`
+    );
+    if (!response.ok) throw new Error("GitHub files could not be loaded");
+
+    const data = await response.json();
+    const files = data.tree.filter(file =>
+      file.type === "blob" &&
+      /\.(jpg|jpeg|png|webp|gif)$/i.test(file.path)
+    );
+
+    showProducts("standard", 2000, files);
+    showProducts("premium", 2350, files);
+  } catch (error) {
+    document.getElementById("standard").innerHTML =
+      '<p class="loading">Could not load photos. Please try again later.</p>';
+    document.getElementById("premium").innerHTML =
+      '<p class="loading">Could not load photos. Please try again later.</p>';
+  }
 }
-function showCart(){
-let box=document.getElementById("items");
-let total=0;
-box.innerHTML="";
-cart.forEach((item,i)=>{
-total+=item.price;
-box.innerHTML+=`<div class="cart-item">${item.name} | ${item.color} | Size ${item.size} | Rs. ${item.price} <button onclick="removeItem(${i})">Remove</button></div>`;
-});
-if(cart.length===0)box.innerHTML="Your cart is empty.";
-document.getElementById("total").innerText="Total: Rs. "+total+"/=";
+
+function showProducts(category, price, files) {
+  const folder = "images/" + category + "/";
+  const photos = files.filter(file => file.path.startsWith(folder));
+  const box = document.getElementById(category);
+
+  if (photos.length === 0) {
+    box.innerHTML = '<p class="loading">No photos found in this folder.</p>';
+    return;
+  }
+
+  box.innerHTML = photos.map((file, index) => {
+    const imageURL = "https://raw.githubusercontent.com/" +
+      owner + "/" + repo + "/main/" +
+      file.path.split("/").map(encodeURIComponent).join("/");
+
+    const name = file.path.split("/").pop()
+      .replace(/\.[^.]+$/, "")
+      .replace(/[-_]/g, " ");
+
+    const id = category + index;
+
+    return `
+      <div class="product">
+        <img src="${imageURL}" alt="${name}" loading="lazy">
+        <h3>${name}</h3>
+        <div class="price">Rs. ${price.toLocaleString("en-US")}/=</div>
+        <select id="color-${id}">
+          <option value="Black">Black</option>
+          <option value="White">White</option>
+        </select>
+        <select id="size-${id}">
+          <option value="">Select Size</option>
+          <option>S</option><option>M</option>
+          <option>L</option><option>XL</option>
+        </select>
+        <button class="add" onclick="addCart(
+          '${category}', '${name.replace(/'/g, "\\'")}',
+          ${price}, 'color-${id}', 'size-${id}'
+        )">ADD TO CART</button>
+      </div>
+    `;
+  }).join("");
 }
-function removeItem(i){cart.splice(i,1);showCart();}
-function checkout(){
-if(cart.length===0){alert("Your cart is empty");return;}
-let message="Hello DEWEN! I want to order:\n";
-let total=0;
-cart.forEach(item=>{
-message+=item.name+" - "+item.color+" - Size "+item.size+" - Rs."+item.price+"\n";
-total+=item.price;
-});
-message+="Total: Rs."+total;
-window.open("https://wa.me/94758512856?text="+encodeURIComponent(message),"_blank");
+
+function addCart(category, name, price, colorId, sizeId) {
+  const color = document.getElementById(colorId).value;
+  const size = document.getElementById(sizeId).value;
+
+  if (!size) {
+    alert("Please select a size");
+    return;
+  }
+
+  cart.push({
+    category: category,
+    name: name,
+    price: price,
+    color: color,
+    size: size
+  });
+
+  showCart();
 }
+
+function showCart() {
+  const box = document.getElementById("items");
+  let total = 0;
+  box.innerHTML = "";
+
+  cart.forEach((item, i) => {
+    total += item.price;
+    box.innerHTML += `
+      <div class="cart-item">
+        ${item.category} | ${item.name} | ${item.color} |
+        Size ${item.size} | Rs. ${item.price}
+        <button onclick="removeItem(${i})">Remove</button>
+      </div>`;
+  });
+
+  if (cart.length === 0) box.innerHTML = "Your cart is empty.";
+  document.getElementById("total").innerText =
+    "Total: Rs. " + total.toLocaleString("en-US") + "/=";
+}
+
+function removeItem(i) {
+  cart.splice(i, 1);
+  showCart();
+}
+
+function checkout() {
+  if (cart.length === 0) {
+    alert("Your cart is empty");
+    return;
+  }
+
+  let message = "Hello DEWEN! I want to order:\n";
+  let total = 0;
+
+  cart.forEach(item => {
+    message += item.category + " - " + item.name +
+      " - " + item.color + " - Size " + item.size +
+      " - Rs." + item.price + "\n";
+    total += item.price;
+  });
+
+  message += "Total: Rs." + total;
+  window.open(
+    "https://wa.me/94758512856?text=" +
+    encodeURIComponent(message), "_blank"
+  );
+}
+
+loadProducts();
 </script>
 </body>
 </html>
