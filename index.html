@@ -206,14 +206,14 @@ const fitId = "fit-" + id;
         </select>
         <button class="add" onclick="addCart(
           '${category}', '${name.replace(/'/g, "\\'")}',
-          ${price}, 'color-${id}', '${fitId}', 'size-${id}'
+         '${price}', 'color-${id}', '${fitId}', 'size-${id}', '${imageURL}'
         )">ADD TO CART</button>
       </div>
     `;
   }).join("");
 }
 
-function addCart(category, name, price, colorId, fitId, sizeId) {
+function addCart(category, name, price, colorId, fitId, sizeId, imageUrl) {
   const color = document.getElementById(colorId).value;
 const fit = document.getElementById(fitId).value;
   const size = document.getElementById(sizeId).value;
@@ -223,15 +223,15 @@ const fit = document.getElementById(fitId).value;
     return;
   }
 
- cart.push({
+  cart.push({
     category: category,
     name: "DEWEN T-Shirt",
     price: price,
     color: color,
-fit: fit,
-    size: size
+    fit: fit,
+    size: size,
+    image: imageUrl
 });
-  
 alert("GOOD CHOICE! ✨");
   showCart();
 }
@@ -275,6 +275,7 @@ function checkout() {
       " - " + item.fit +
       " - Size " + item.size +
       " - Rs. " + item.price + "\n";
+message += "Photo: " + item.image + "\n";
     total += item.price;
   });
 
