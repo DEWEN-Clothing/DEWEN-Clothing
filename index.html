@@ -224,23 +224,35 @@ function checkout() {
     return;
   }
 
-  let message = "Hello DEWEN! I want to order:\n";
+  let country = prompt("Please enter your country:");
+  if (!country || country.trim() === "") {
+    alert("Please enter your country.");
+    return;
+  }
+
+  let message = "Hello DEWEN! I want to place an order.\n\n";
   let total = 0;
 
   cart.forEach(item => {
     message += item.category + " - " + item.name +
-      " - " + item.color + " - Size " + item.size +
-      " - Rs." + item.price + "\n";
+      " - " + item.color +
+      " - " + item.fit +
+      " - Size " + item.size +
+      " - Rs. " + item.price + "\n";
     total += item.price;
   });
 
-  message += "Total: Rs." + total;
+  message += "\nCountry: " + country;
+  message += "\nProduct Total: Rs. " + total;
+  message += "\nShipping: Please confirm shipping cost.";
+  message += "\n\nThank you!";
+
   window.open(
     "https://wa.me/94758512856?text=" +
-    encodeURIComponent(message), "_blank"
+    encodeURIComponent(message),
+    "_blank"
   );
 }
-
 
 loadProducts();
 </script>
