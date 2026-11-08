@@ -80,9 +80,9 @@ nav a{margin-left:8px;font-size:10px}
 <div id="items">Your cart is empty.</div>
 <h3 id="total" style="margin:20px">Total: Rs. 0/=</h3>
 <label for="country-select">SELECT YOUR COUNTRY</label>
-<select id="country-select">
-  <option value="">Choose your country</option>
-</select>
+<input list="country-list" id="country-select"
+placeholder="Search your country...">
+<datalist id="country-list"></datalist>
 <button class="add" onclick="checkout()">ORDER VIA WHATSAPP</button>
 </section>
 
@@ -105,17 +105,17 @@ let cart = [];
 fetch("https://restcountries.com/v3.1/all?fields=name")
   .then(response => response.json())
   .then(countries => {
-    const select = document.getElementById("country-select");
-    countries
-      .map(country => country.name.common)
-      .sort()
-      .forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        select.appendChild(option);
-      });
+const list = document.getElementById("country-list");
+
+countries
+  .map(country => country.name.common)
+  .sort()
+  .forEach(name => {
+    const option = document.createElement("option");
+    option.value = name;
+    list.appendChild(option);
   });
+     });
 async function loadProducts() {
   try {
     const response = await fetch(
