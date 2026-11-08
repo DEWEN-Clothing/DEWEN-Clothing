@@ -303,37 +303,72 @@ loadProducts();
 <script>
 let photoZoom = 1;
 
+let photoZoom = 1;
+let touchStartDistance = 0;
+
+const viewer = document.getElementById("photo-viewer");
+const fullPhoto = document.getElementById("full-photo");
+
+function updateZoom() {
+  fullPhoto.style.transform = "scale(" + photoZoom + ")";
+}
+
+function zoomPhoto(amount) {
+  photoZoom = Math.max(0.5, Math.min(4, photoZoom * amount));
+  updateZoom();
+}
+
 document.addEventListener("click", function(e) {
   if (e.target.tagName === "IMG" &&
       e.target.id !== "full-photo" &&
       !e.target.closest("#photo-viewer")) {
-    const viewer = document.getElementById("photo-viewer");
-    const full = document.getElementById("full-photo");
-    full.src = e.target.src;
+    fullPhoto.src = e.target.src;
     photoZoom = 1;
-    full.style.transform = "scale(1)";
+    updateZoom();
     viewer.style.display = "flex";
   }
 });
 
-function zoomPhoto(amount) 
-  photoZoom *= amount;
-  photoZoom = Math.max(0.5, Math.min(photoZoom, 4));
-  document.getElementById("full-photo").style.transform =
-    "scale(" + photoZoom + ")";
-}
-
 function closePhoto(e) {
-
-  if (
-    e.target.id === "photo-viewer" ||
-    (e.target.tagName === "BUTTON" &&
-     e.target.innerText.trim() === "X")
-  ) {
-    document.getElementById("photo-viewer").style.display = "none";
+  if (e.target.id === "photo-viewer" ||
+      (e.target.tagName === "BUTTON" &&
+       e.target.innerText.trim() === "X")) {
+    viewer.style.display = "none";
   }
 }
 
- </script>
+viewer.addEventListener("wheel", function(e) {
+  e.preventDefault();
+  zoomPhoto(e.deltaY < 0 ? 1.15 : 0.87);
+}, { passive: false });
+
+fullPhoto.addEventListener("touchstart", function(e) {
+  if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    touchStartDistance = Math.hypot(dx, dy);
+  }
+}, { passive: true });
+
+fullPhoto.addEventListener("touchmove", function(e) {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const distance = Math.hypot(dx, dy);
+
+    if (touchStartDistance > 0) {
+      photoZoom *= distance / touchStartDistance;
+      photoZoom = Math.max(0.5, Math.min(4, photoZoom));
+      updateZoom();
+    }
+    touchStartDistance = distance;
+  }
+}, { passive: false });
+
+fullPhoto.addEventListener("touchend", function() {
+  touchStartDistance = 0;
+});
+</script>
  </body>
 </html>
