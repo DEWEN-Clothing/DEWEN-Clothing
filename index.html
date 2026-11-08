@@ -276,7 +276,7 @@ function checkout() {
       " - Size " + item.size +
       " - Rs. " + item.price + "\n";
 message += "Photo: " + item.image + "\n";
-    total += item.price;
+    total += Number(item.price);
   });
 
   message += "\nTotal: Rs. " + total;
