@@ -79,6 +79,10 @@ nav a{margin-left:8px;font-size:10px}
 <h2>YOUR CART</h2>
 <div id="items">Your cart is empty.</div>
 <h3 id="total" style="margin:20px">Total: Rs. 0/=</h3>
+<label for="country-select">SELECT YOUR COUNTRY</label>
+<select id="country-select">
+  <option value="">Choose your country</option>
+</select>
 <button class="add" onclick="checkout()">ORDER VIA WHATSAPP</button>
 </section>
 
@@ -98,7 +102,20 @@ nav a{margin-left:8px;font-size:10px}
 const owner = "kasunnimesh1000-kasun";
 const repo = "DEWEN-Clothing";
 let cart = [];
-
+fetch("https://restcountries.com/v3.1/all?fields=name")
+  .then(response => response.json())
+  .then(countries => {
+    const select = document.getElementById("country-select");
+    countries
+      .map(country => country.name.common)
+      .sort()
+      .forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+  });
 async function loadProducts() {
   try {
     const response = await fetch(
@@ -224,12 +241,12 @@ function checkout() {
     return;
   }
 
-  let country = prompt("Please enter your country:");
-  if (!country || country.trim() === "") {
-    alert("Please enter your country.");
-    return;
-  }
+  let country = document.getElementById("country-select").value;
 
+if (!country) {
+  alert("Please select your country.");
+  return;
+}
   let message = "Hello DEWEN! I want to place an order.\n\n";
   let total = 0;
 
