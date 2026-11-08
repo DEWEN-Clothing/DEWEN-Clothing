@@ -190,7 +190,7 @@ const fitId = "fit-" + id;
       <div class="product">
         <img src="${imageURL}" alt="${name}" loading="lazy">
         <h3>${category === "standard" ? "STANDARD ARTWORK" : "PREMIUM ARTWORK"}</h3>
-<div class="price">${formatPrice(price)}</div>
+<div class="price">Rs. ${price.toLocaleString("en-US")}/=</div>
                <select id="color-${id}">
           <option value="Black">Black</option>
           <option value="White">White</option>
@@ -261,42 +261,91 @@ function removeItem(i) {
   showCart();
 }
 
-function checkout() {
+  async function checkout() {
   if (cart.length === 0) {
     alert("Your cart is empty");
     return;
   }
 
-  let country = document.getElementById("country-select").value;
+  const country = document.getElementById("country-select").value;
 
-if (!country) {
-  alert("Please select your country.");
-  return;
+  if (!country) {
+    alert("Please select your country.");
+    return;
+  }
+
+  try {
+    let currencyCode = "LKR";
+
+    if (country.toLowerCase() !== "sri lanka") {
+      const countryResponse = await fetch(
+        "https://restcountries.com/v3.1/name/" +
+        encodeURIComponent(country) + "?fullText=true&fields=currencies"
+      );
+
+      const countryData = await countryResponse.json();
+
+      if (!countryData[0] || !countryData[0].currencies) {
+        throw new Error("Currency not found");
+      }
+
+      currencyCode = Object.keys(countryData[0].currencies)[0];
+    }
+
+    const rateResponse = await fetch(
+      "https://open.er-api.com/v6/latest/LKR"
+    );
+
+    const rateData = await rateResponse.json();
+
+    if (rateData.result !== "success" ||
+        !rateData.rates[currencyCode]) {
+      throw new Error("Exchange rate unavailable");
+    }
+
+    const rate = rateData.rates[currencyCode];
+
+    const formatMoney = (amount) =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: currencyCode
+      }).format(amount);
+
+    let message = "Hello DEWEN! I want to place an order.\n\n";
+    let total = 0;
+
+    cart.forEach(item => {
+      const foreignPrice = item.price * rate;
+
+      message += item.category + " - " + item.name +
+        " - " + item.color +
+        " - " + item.fit +
+        " - Size " + item.size +
+        "\nLKR: Rs. " + item.price.toLocaleString("en-US") +
+        "\n" + currencyCode + ": " + formatMoney(foreignPrice) +
+        "\n\n";
+
+      total += item.price;
+    });
+
+    message += "Country: " + country;
+    message += "\nProduct Total (LKR): Rs. " +
+      total.toLocaleString("en-US");
+    message += "\nProduct Total (" + currencyCode + "): " +
+      formatMoney(total * rate);
+    message += "\nShipping: Please confirm shipping cost.";
+    message += "\n\nThank you!";
+
+    window.open(
+      "https://wa.me/94758512856?text=" +
+      encodeURIComponent(message),
+      "_blank"
+    );
+
+  } catch (error) {
+    alert("Currency conversion failed. Please try again.");
+  }
 }
-  let message = "Hello DEWEN! I want to place an order.\n\n";
-  let total = 0;
-
-  cart.forEach(item => {
-    message += item.category + " - " + item.name +
-      " - " + item.color +
-      " - " + item.fit +
-      " - Size " + item.size +
-      " - Rs. " + item.price + "\n";
-    total += item.price;
-  });
-
-  message += "\nCountry: " + country;
-  message += "\nProduct Total: Rs. " + total;
-  message += "\nShipping: Please confirm shipping cost.";
-  message += "\n\nThank you!";
-
-  window.open(
-    "https://wa.me/94758512856?text=" +
-    encodeURIComponent(message),
-    "_blank"
-  );
-}
-
 loadProducts();
 </script>
 
