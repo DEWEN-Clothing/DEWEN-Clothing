@@ -242,7 +242,7 @@ function showCart() {
   box.innerHTML = "";
 
   cart.forEach((item, i) => {
-    total += item.price;
+    total += Number(item.price);
     box.innerHTML += `
       <div class="cart-item">
         ${item.category.toUpperCase()} ARTWORK | | ${item.name} | ${item.color} | ${item.fit}
