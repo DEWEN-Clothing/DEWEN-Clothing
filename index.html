@@ -343,8 +343,8 @@ function removeItem(i) {
     );
 
   } catch (error) {
-    alert("Currency conversion failed. Please try again.");
-  }
+alert("Error: " + error.message);
+     }
 }
 loadProducts();
 </script>
